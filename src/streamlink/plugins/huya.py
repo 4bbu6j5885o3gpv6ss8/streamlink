@@ -98,7 +98,8 @@ class Huya(Plugin):
         self.id, self.author, self.title, streamdata = data
 
         for cdntype, priority, streamname, flvurl, suffix, anticode in streamdata:
-            url = update_scheme("https://", f"{flvurl}/{streamname}.{suffix}?{anticode}")
+            anticode = re.findall(r'^(.*?)\&ctype',anticode)[0]
+            url = update_scheme("https://", f"{flvurl}/{streamname}.{suffix}?{anticode}")            
             if self.session.http.head(url, raise_for_status=False).status_code >= 400:
                 continue
 
